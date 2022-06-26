@@ -1,0 +1,45 @@
+title Sending a new note
+
+note over Client
+User types something and presses the button to save their note
+end note
+
+Client->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over Server
+Server receives the note, and pushes it to its local note storage.
+The server now sends a command to the client to cause the client to
+reload this page.
+end note
+
+Server-->Client: 302 FOUND redirect to /exampleapp/notes
+
+note over Client
+Client loads the page once again, in order to update the notes.
+It now loads the HTML code as well as the CSS and Javascript files.
+end note
+
+Client->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+Server-->Client: 200 SUCCESS HTML code /exampleapp/notes
+Client->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+Server-->Client: 200 SUCCESS CSS code /exampleapp/main.css
+Client->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+Server-->Client: 200 SUCCCESS JS code /exampleapp/main.js
+
+note over Client:
+Client executes /exampleapp/main.js, which causes it to
+initiate a new HTTP request to /exampleapp/data.json
+end note
+
+Client->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+
+note over Server:
+Server returns updated JSON of the array of notes.
+end note
+
+Server-->Client: 200 SUCCESS JSON array of note objects
+
+note over Client:
+Client now executes the xhttp.onreadystatechange function
+and renders the array of notes to the DOM.
+end note

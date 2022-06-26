@@ -1,0 +1,25 @@
+title Sending a new note in the SPA
+
+actor User
+
+User->Client: User types a new note and presses Save
+Client->Client: New note is pushed to notes array
+Client->Client: Text field's value is blanked
+Client->Client: DOM is updated
+Client-->User: User sees their new note added to the bottom of the list.
+
+note over Client
+    The new note is simply pushed to the end of the notes.
+    This means you can see more than the normal amount of notes on the page.
+    When you refresh the page, the topmost note will be gone,
+    deleted from the server.
+end note
+
+Client->Server: HTTP POST new note to https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+Server-->Client: 201 CREATED JSON: {"message":"note created"}
+Client->User: Client console logs response text
+
+note over Client
+    This process does not fetch the updated notes from the server,
+    so things may look different than you think when you refresh.
+end note

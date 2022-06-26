@@ -1,0 +1,30 @@
+title Loading the SPA notes app
+
+actor User
+
+User->Client: User navigates to the SPA Notes app
+
+Client->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+Server-->Client: 200 SUCCESS HTML code /exampleapp/spa
+Client->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+Server-->Client: 200 SUCCESS CSS code /exampleapp/main.css
+Client->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+Server-->Client: 200 SUCCESS JS code /exampleapp/spa.js
+
+note over Client
+Client runs spa.js
+an HTTP GET request to /exampleapp/data.json is created
+end note
+
+Client->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+Server-->Client: 200 SUCCESS JSON array of notes
+
+note over Client
+xhttp.onreadystatechange is executed due to
+completion of the HTTP GET request.
+Notes are updated via the JSON and rendered to the DOM.
+end note
+
+Client->Client: DOM updated with notes fetched from server
+
+Client-->User: User sees full page with updated notes
