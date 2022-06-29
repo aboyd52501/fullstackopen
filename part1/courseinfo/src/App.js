@@ -1,27 +1,29 @@
 
 function App() {
 
-  const course = 'Half Stack application development';
-  const parts =  [
-    {
-      name: 'Fundamentals of React',
-      exercises: 10
-    },
-    {
-      name: 'Using props to pass data',
-      exercises: 7
-    },
-    {
-      name: 'State of a component',
-      exercises: 14
-    }
-  ];
+  const course = { 
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  }
 
   return (
     <div>
-      <Header course={course} />
-      <Content courses={parts} />
-      <Total exercises={parts.reduce((acc, x) => acc + x.exercises, 0)} />
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Total exercises={course.parts.reduce((acc, x) => acc + x.exercises, 0)} />
     </div>
   );
 }
@@ -37,9 +39,9 @@ const Header = (props) => {
 
 const Content = (props) => (
   <div>
-      <Part course={props.courses[0]} />
-      <Part course={props.courses[1]} />
-      <Part course={props.courses[2]} />
+      <Part course={props.parts[0]} />
+      <Part course={props.parts[1]} />
+      <Part course={props.parts[2]} />
   </div>
 );
 
