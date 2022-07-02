@@ -23,14 +23,30 @@ const App = () => {
     setVotes(copy);
   };
 
+  const bestAnecdote = votes.reduce((iMax, x, i, arr) => {
+    if (arr[iMax] < x)
+      return i;
+    else
+      return iMax;
+  }, 0);
+
   return (
     <div>
-      {anecdotes[selected]}
-      <br />
-      has {votes[selected]} votes
-      <br />
-      <Button name="vote" onClick={vote} />
-      <Button name="next anecdote" onClick={setRandom} />
+      <h1>Anecdote of the day</h1>
+      <div>
+        {anecdotes[selected]}
+        <br />
+        has {votes[selected]} votes
+        <br />
+        <Button name="vote" onClick={vote} />
+        <Button name="next anecdote" onClick={setRandom} />
+      </div>
+      <h1>Anecdote with most votes</h1>
+      <div>
+        {anecdotes[bestAnecdote]}
+        <br />
+        has {votes[bestAnecdote]} votes
+      </div>
     </div>
   );
 }
