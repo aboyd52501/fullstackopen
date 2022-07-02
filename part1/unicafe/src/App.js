@@ -5,16 +5,25 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  const total = good + neutral + bad;
-  const average = ((good - bad) / total) || 0; // || 0 -> Prevent NaN from rendering
-  const positive = (good / total) || 0;
-
   return (
     <div>
       <h1>Give feedback</h1>
       <Button name='good' handleClick={() => setGood(good + 1)} />
       <Button name='neutral' handleClick={() => setNeutral(neutral + 1)} />
       <Button name='bad' handleClick={() => setBad(bad + 1)} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
+    </div>
+  );
+};
+
+const Statistics = ({good, neutral, bad}) => {
+  
+  const total = good + neutral + bad;
+  const average = ((good - bad) / total) || 0; // || 0 -> Prevent NaN from rendering
+  const positive = (good / total) || 0;
+
+  return (
+    <div>
       <h1>Statistics</h1>
       <DisplayCounter name='good' value={good} />
       <DisplayCounter name='neutral' value={neutral} />
@@ -24,7 +33,7 @@ const App = () => {
       <DisplayCounter name="positive" value={positive} />
     </div>
   );
-};
+}
 
 const DisplayCounter = ({name, value}) => (
   <div>
