@@ -27,7 +27,8 @@ const Statistics = ({good, neutral, bad}) => {
         <p>No feedback given</p>
       </div>
     );
-  } else {
+  }
+  else {
 
     const average = ((good - bad) / total) || 0; // || 0 -> Prevent NaN from rendering
     const positive = (good / total) || 0;
@@ -35,21 +36,26 @@ const Statistics = ({good, neutral, bad}) => {
     return (
       <div>
         <h1>Statistics</h1>
-        <DisplayCounter name='good' value={good} />
-        <DisplayCounter name='neutral' value={neutral} />
-        <DisplayCounter name='bad' value={bad} />
-        <DisplayCounter name="all" value={total} />
-        <DisplayCounter name="average" value={average} />
-        <DisplayCounter name="positive" value={positive} />
+        <table>
+          <tbody>
+            <StatisticLine name='good' value={good} />
+            <StatisticLine name='neutral' value={neutral} />
+            <StatisticLine name='bad' value={bad} />
+            <StatisticLine name="all" value={total} />
+            <StatisticLine name="average" value={average} />
+            <StatisticLine name="positive" value={positive} />
+          </tbody>
+        </table>
       </div>
     );
   }
 }
 
-const DisplayCounter = ({name, value}) => (
-  <div>
-    <p>{name} {value}</p>
-  </div>
+const StatisticLine = ({name, value}) => (
+  <tr>
+    <td>{name}</td>
+    <td>{value}</td>
+  </tr>
 );
 
 const Button = ({name, handleClick}) => (
