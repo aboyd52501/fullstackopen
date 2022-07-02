@@ -19,20 +19,31 @@ const App = () => {
 const Statistics = ({good, neutral, bad}) => {
   
   const total = good + neutral + bad;
-  const average = ((good - bad) / total) || 0; // || 0 -> Prevent NaN from rendering
-  const positive = (good / total) || 0;
 
-  return (
-    <div>
-      <h1>Statistics</h1>
-      <DisplayCounter name='good' value={good} />
-      <DisplayCounter name='neutral' value={neutral} />
-      <DisplayCounter name='bad' value={bad} />
-      <DisplayCounter name="all" value={total} />
-      <DisplayCounter name="average" value={average} />
-      <DisplayCounter name="positive" value={positive} />
-    </div>
-  );
+  if (total === 0) {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <p>No feedback given</p>
+      </div>
+    );
+  } else {
+
+    const average = ((good - bad) / total) || 0; // || 0 -> Prevent NaN from rendering
+    const positive = (good / total) || 0;
+
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <DisplayCounter name='good' value={good} />
+        <DisplayCounter name='neutral' value={neutral} />
+        <DisplayCounter name='bad' value={bad} />
+        <DisplayCounter name="all" value={total} />
+        <DisplayCounter name="average" value={average} />
+        <DisplayCounter name="positive" value={positive} />
+      </div>
+    );
+  }
 }
 
 const DisplayCounter = ({name, value}) => (
