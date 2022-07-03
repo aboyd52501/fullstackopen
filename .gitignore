@@ -1,0 +1,11 @@
+# ignore default react project files
+
+**/node_modules/
+
+# src folder
+**/App.css
+**/*.test.*
+**/index.css
+**/logo.svg
+**/reportWebVitals.js
+**/setupTests.js
