@@ -1,10 +1,12 @@
 import { useState } from 'react'
 
 const App = () => {
+
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas',
+    {
+      name: 'Arto Hellas',
       id: 1
-    }
+    },
   ]) 
   const [newName, setNewName] = useState('')
 
@@ -14,17 +16,24 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newPerson = {
-      name: newName,
-      id: crypto.randomUUID()
-    };
-    setPersons([...persons, newPerson]);
+
+    if (persons.find(person => person.name === newName)) { // If this person already exists, don't add them.
+      alert(`${newName} is already in the phonebook!`);
+    }
+    else {
+        const newPerson = {
+        name: newName,
+        id: crypto.randomUUID()
+      };
+      setPersons([...persons, newPerson]);
+    }
+    
     setNewName('');
+
   };
 
   return (
     <div>
-      <div>debug: {newName}</div>
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
         <div>
