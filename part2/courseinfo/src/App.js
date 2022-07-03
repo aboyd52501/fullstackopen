@@ -12,12 +12,17 @@ const Content = ({ parts }) =>
     <Part key={part.id} part={part} />
   );
 
-const Course = ({ course }) => (
-  <div>
-    <Header course={course.name} />
-    <Content parts={course.parts} />
-  </div>
-);
+const Course = ({ course }) => {
+  const total = course.parts.reduce((acc, part) => acc + part.exercises, 0);
+
+  return (
+    <div>
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Total sum={total} />
+    </div>
+  );
+}
 
 const App = () => {
   const course = {
