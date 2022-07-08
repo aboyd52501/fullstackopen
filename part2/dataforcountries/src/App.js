@@ -4,9 +4,53 @@ import axios from 'axios'
 
 const SearchField = ({ value, onChange }) => {
   return (
-    <div>find countries <input value={value} onChange={onChange} /></div>
+    <div>Find countries: <input value={value} onChange={onChange} /></div>
   );
 };
+
+const CountrySmall = ({country}) => (
+  <p>{country.name.common} <CountryFlagSmall country={country} /></p>
+);
+
+const CountryFlag = ({country}) => (
+  <img
+    alt={`The flag of ${country.name.common}`}
+    src={country.flags.svg}
+    width={200}
+  />
+);
+
+const CountryFlagSmall = ({country}) => (
+  <img
+    alt={`The flag of ${country.name.common}`}
+    src={country.flags.svg}
+    style={{height: '0.8em', display: 'inline'}}
+  />
+);
+
+const CountryPage = ({country}) => (
+  <div>
+
+    <h1>{country.name.common}</h1>
+
+    <h2>Capital</h2>
+    <p>{(country.capital && country.capital[0]) || "None"}</p>
+
+    <h2>Area</h2>
+    <p>{country.area}</p>
+
+    <h2>Languages</h2>
+    <ul>
+      {
+        country.languages ?
+          Object.values(country.languages).map(lang => <li key={lang}>{lang}</li>) :
+          "None"
+      }
+    </ul>
+
+    <CountryFlag country={country} />
+  </div>
+);
 
 const App = (props) => {
 
@@ -22,10 +66,25 @@ const App = (props) => {
   };
   useEffect(fetchCountries, []);
 
+  const getCountries = () => {
+    const filtered = countries.filter(cnty => cnty.name.common.toLowerCase().match(search.toLowerCase()));
+    
+    if (filtered.length > 10)
+      return <p>Too many matches ({filtered.length}), specify another filter.</p>
+    else if (filtered.length > 1)
+      return filtered.map(cnty => <CountrySmall key={cnty.cca2} country={cnty} />);
+    else if (filtered.length === 1) {
+      const cnty = filtered[0];
+      return <CountryPage country={cnty} />
+    }
+    else
+      return <p>No matches.</p>
+  };
+
   return (
     <div>
       <SearchField value={search} onChange={handleSearch} />
-      {countries.map(cnty => <p key={cnty.cca2}>{cnty.name.common}</p>)}
+      {getCountries()}
     </div>
   );
 }
