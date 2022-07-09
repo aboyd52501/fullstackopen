@@ -15,7 +15,6 @@ const ShowButton = ({country, setSearch}) => {
   );
 };
 
-
 const CountrySmall = ({country, setSearch}) => (
   <div>{country.name.common} <CountryFlagSmall country={country} /> <ShowButton country={country} setSearch={setSearch} /></div>
 );
@@ -36,13 +35,58 @@ const CountryFlagSmall = ({country}) => (
   />
 );
 
+const getCapital = country => (country.capital && country.capital[0]) || "None";
+
+const WeatherCapital = ({country}) => {
+
+  const getCap = getCapital(country);
+
+  const weatherName = getCap === "None" ? country.name.common : getCap; // Fix for Antarctica
+  const latLong = country.capitalInfo.latlng || country.latlng;
+
+  // Grab the weather (as a side effect) and store it in state
+  const [weather, setWeather] = useState(null);
+  const fetchWeather = () => {
+    axios
+      .get(
+        "https://api.openweathermap.org/data/2.5/weather", // - ?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+        {
+          params: {
+            lat: latLong[0],
+            lon: latLong[1],
+            appid: process.env.REACT_APP_OPENWEATHER_API_KEY,
+            units: "imperial"
+          }
+        }
+      )
+      .then(response => setWeather(response.data));
+  };
+  useEffect(fetchWeather, [latLong]);
+
+  if (weather === null) 
+    return <div>Loading weather for {weatherName}...</div>
+  else
+    return (
+      <div>
+        <h2>Weather in {weatherName}</h2>
+        <h3>{weather.weather[0].main}</h3>
+        <div>Temperature: {weather.main.temp} F</div>
+        <div>Feels like: {weather.main.feels_like} F</div>
+        <div>Humidity: {weather.main.humidity}%</div>
+        <div>Pressure: {weather.main.grnd_level} hPa</div>
+        <div>Wind: {weather.wind.speed} mph</div>
+        <img alt={weather.weather[0].description} src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}/>
+      </div>
+    );
+};
+
 const CountryPage = ({country}) => (
   <div>
 
     <h1>{country.name.common}</h1>
 
     <h2>Capital</h2>
-    <p>{(country.capital && country.capital[0]) || "None"}</p>
+    <p>{getCapital(country)}</p>
 
     <h2>Area</h2>
     <p>{country.area}</p>
@@ -57,6 +101,8 @@ const CountryPage = ({country}) => (
     </ul>
 
     <CountryFlag country={country} />
+
+    <WeatherCapital country={country} />
   </div>
 );
 
