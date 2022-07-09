@@ -8,8 +8,16 @@ const SearchField = ({ value, onChange }) => {
   );
 };
 
-const CountrySmall = ({country}) => (
-  <p>{country.name.common} <CountryFlagSmall country={country} /></p>
+const ShowButton = ({country, setSearch}) => {
+  const searchThisCountry = () => setSearch(country.name.common);
+  return (
+    <button onClick={searchThisCountry} >Show</button>
+  );
+};
+
+
+const CountrySmall = ({country, setSearch}) => (
+  <div>{country.name.common} <CountryFlagSmall country={country} /> <ShowButton country={country} setSearch={setSearch} /></div>
 );
 
 const CountryFlag = ({country}) => (
@@ -67,12 +75,17 @@ const App = (props) => {
   useEffect(fetchCountries, []);
 
   const getCountries = () => {
+
     const filtered = countries.filter(cnty => cnty.name.common.toLowerCase().match(search.toLowerCase()));
     
-    if (filtered.length > 10)
+    const exactMatch = filtered.find(cnty => cnty.name.common.toLowerCase() === search.toLowerCase());
+
+    if (exactMatch)
+      return <CountryPage country={exactMatch} />
+    else if (filtered.length > 10)
       return <p>Too many matches ({filtered.length}), specify another filter.</p>
     else if (filtered.length > 1)
-      return filtered.map(cnty => <CountrySmall key={cnty.cca2} country={cnty} />);
+      return filtered.map(cnty => <CountrySmall key={cnty.cca2} country={cnty} setSearch={setSearch} />);
     else if (filtered.length === 1) {
       const cnty = filtered[0];
       return <CountryPage country={cnty} />
