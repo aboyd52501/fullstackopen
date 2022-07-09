@@ -1,57 +1,42 @@
 import { useState, useEffect } from 'react'
 
-import axios from 'axios'
+import personService from './services/personService'
 
 import Filter from './components/filter'
 import PersonForm from './components/personform'
 import Persons from './components/persons'
 
-
 const App = () => {
 
   const [persons, setPersons] = useState([]);
 
-  const fetchPersons = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(({ data }) => setPersons(data));
+  const fetchPersons = () =>
+    personService
+      .getAll()
+      .then(data => setPersons(data));
+
+  const addPerson = newPerson =>
+    personService
+      .add(newPerson)
+      .then(data => setPersons(persons.concat(data)));
+
+  const removePerson = person => {
+    if (window.confirm(`Delete ${person.name}?`))
+      return personService
+        .remove(person)
+        .then(() => setPersons( persons.filter(p => p.id !== person.id) ));
   };
 
-  useEffect(fetchPersons, []);
+  useEffect(() => {
+    const func = async () => {
+      await fetchPersons();
+    }
+    func();
+  }, []);
   
   const [filter, setFilter] = useState('');
-  const [newName, setNewName] = useState('');
-  const [newNumber, setNewNumber] = useState('');
-
-  const handleName = (event) => {
-    setNewName(event.target.value);
-  };
-
-  const handleNumber = (event) => {
-    setNewNumber(event.target.value);
-  };
 
   const handleFilter = event => setFilter(event.target.value);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    if (persons.find(person => person.name === newName)) { // If this person already exists, don't add them.
-      alert(`${newName} is already in the phonebook!`);
-    }
-    else {
-      const newPerson = {
-        name: newName,
-        number: newNumber,
-        id: crypto.randomUUID()
-      };
-      setPersons([...persons, newPerson]);
-    }
-    
-    setNewName('');
-    setNewNumber('');
-
-  };
 
   return (
     <div>
@@ -65,11 +50,8 @@ const App = () => {
       <h2>Add new person</h2>
       
       <PersonForm
-        onSubmit={handleSubmit}
-        nameValue={newName}
-        nameChange={handleName}
-        numberValue={newNumber}
-        numberChange={handleNumber}
+        addPerson={addPerson}
+        persons={persons}
       />
 
       <h2>Numbers</h2>
@@ -77,6 +59,7 @@ const App = () => {
       <Persons
         contacts={persons}
         filter={filter}
+        remove={removePerson}
       />
 
     </div>
