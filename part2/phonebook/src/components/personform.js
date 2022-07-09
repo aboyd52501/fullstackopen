@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const PersonForm = ({addPerson, persons}) => {
+const PersonForm = ({submitPerson}) => {
 
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
@@ -10,19 +10,14 @@ const PersonForm = ({addPerson, persons}) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-    
-        if (persons.find(person => person.name === newName)) { // If this person already exists, don't add them.
-            alert(`${newName} is already in the phonebook!`);
-        }
-        else {
-            const newPerson = {
-                name: newName,
-                number: newNumber,
-                //id: crypto.randomUUID() // json-server seems to add this field by default, and ensures no collisions.
-            };
-            addPerson(newPerson);
-        }
-        
+
+        const newPerson = {
+            name: newName,
+            number: newNumber,
+            //id: crypto.randomUUID() // json-server seems to add this field by default, and ensures no collisions.
+        };
+        submitPerson(newPerson);
+
         setNewName('');
         setNewNumber('');
     };

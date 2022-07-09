@@ -12,11 +12,16 @@ const add = person =>
         .post(BASE_URL, person)
         .then(response => response.data);
 
+const update = (id, person) =>
+    axios
+        .put(`${BASE_URL}/${id}`, person)
+        .then(response => response.data);
+
 const remove = person =>
     axios
         .delete(`${BASE_URL}/${person.id}`)
         .then(response => response.data);
 
-const personService = { getAll, add, remove };
+const personService = { getAll, add, update, remove };
 
 export default personService

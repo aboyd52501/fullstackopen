@@ -20,6 +20,21 @@ const App = () => {
       .add(newPerson)
       .then(data => setPersons(persons.concat(data)));
 
+  const updatePerson = (id, updatedPerson) =>
+    personService
+      .update(id, updatedPerson)
+      .then(updatedPerson => {
+        setPersons(persons.map(p => p.id === id ? updatedPerson : p));
+      });
+
+  const submitPerson = newPerson => {
+    const exists = persons.find(p => p.name === newPerson.name);
+    if (exists && window.confirm(`${newPerson.name} is already in the phonebook. Update their number?`))
+      updatePerson(exists.id, newPerson);
+    else
+      addPerson(newPerson);
+  }
+
   const removePerson = person => {
     if (window.confirm(`Delete ${person.name}?`))
       return personService
@@ -50,8 +65,7 @@ const App = () => {
       <h2>Add new person</h2>
       
       <PersonForm
-        addPerson={addPerson}
-        persons={persons}
+        submitPerson={submitPerson}
       />
 
       <h2>Numbers</h2>
