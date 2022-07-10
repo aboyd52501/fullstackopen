@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react'
 
 import personService from './services/personService'
 
-import Filter from './components/filter'
-import PersonForm from './components/personform'
-import Persons from './components/persons'
+import SuccessNotification from './components/SuccessNotification'
+import FailureNotification from './components/FailureNotification'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
 
@@ -18,13 +20,18 @@ const App = () => {
   const addPerson = newPerson =>
     personService
       .add(newPerson)
-      .then(data => setPersons(persons.concat(data)));
+      .then(person => {
+        setPersons(persons.concat(person));
+        displaySuccessMsg(`Added ${newPerson.name}`);
+        return person;
+      });
 
   const updatePerson = (id, updatedPerson) =>
     personService
       .update(id, updatedPerson)
-      .then(updatedPerson => {
-        setPersons(persons.map(p => p.id === id ? updatedPerson : p));
+      .then(returnedPerson => {
+        setPersons(persons.map(p => p.id === id ? returnedPerson : p));
+        displaySuccessMsg(`Phone number of ${returnedPerson.name} changed to ${returnedPerson.number}`);
       });
 
   const submitPerson = newPerson => {
@@ -39,7 +46,15 @@ const App = () => {
     if (window.confirm(`Delete ${person.name}?`))
       return personService
         .remove(person)
-        .then(() => setPersons( persons.filter(p => p.id !== person.id) ));
+        .then(() => {
+          displaySuccessMsg(`Removed ${person.name}`);
+        })
+        .catch(error => {
+          displayFailMsg(`Entry for ${person.name} has already been removed from the server`)
+        })
+        .finally(() => {
+          setPersons( persons.filter(p => p.id !== person.id))
+        })
   };
 
   useEffect(() => {
@@ -53,9 +68,29 @@ const App = () => {
 
   const handleFilter = event => setFilter(event.target.value);
 
+  const [successMsg, setSuccessMsg] = useState(null);
+  const displaySuccessMsg = msg => {
+    setSuccessMsg(msg);
+    setTimeout(() => setSuccessMsg(null), 5000);
+  };
+
+  const [failMsg, setFailMsg] = useState(null);
+  const displayFailMsg = msg => {
+    setFailMsg(msg);
+    setTimeout(() => setFailMsg(null), 5000);
+  };
+
   return (
     <div>
       <h1>Phonebook</h1>
+
+      <SuccessNotification
+        message={successMsg}
+      />
+
+      <FailureNotification
+        message={failMsg}
+      />
 
       <Filter
         value={filter}
