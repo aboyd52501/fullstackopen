@@ -39,7 +39,7 @@ const App = () => {
     if (exists && window.confirm(`${newPerson.name} is already in the phonebook. Update their number?`))
       updatePerson(exists.id, newPerson);
     else
-      addPerson(newPerson);
+      displaySuccessMsg(`No update made to ${newPerson.name}`);
   }
 
   const removePerson = person => {
