@@ -36,10 +36,13 @@ const App = () => {
 
   const submitPerson = newPerson => {
     const exists = persons.find(p => p.name === newPerson.name);
-    if (exists && window.confirm(`${newPerson.name} is already in the phonebook. Update their number?`))
-      updatePerson(exists.id, newPerson);
+    if (exists)
+      if (window.confirm(`${newPerson.name} is already in the phonebook. Update their number?`))
+        updatePerson(exists.id, newPerson);
+      else
+        displaySuccessMsg(`No update made to ${newPerson.name}`);
     else
-      displaySuccessMsg(`No update made to ${newPerson.name}`);
+      addPerson(newPerson);
   }
 
   const removePerson = person => {
