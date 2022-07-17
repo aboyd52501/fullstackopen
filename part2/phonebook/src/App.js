@@ -15,7 +15,8 @@ const App = () => {
   const fetchPersons = () =>
     personService
       .getAll()
-      .then(data => setPersons(data));
+      .then(data => setPersons(data))
+      .catch(console.error);
 
   const addPerson = newPerson =>
     personService
@@ -24,6 +25,9 @@ const App = () => {
         setPersons(persons.concat(person));
         displaySuccessMsg(`Added ${newPerson.name}`);
         return person;
+      })
+      .catch(error => {
+        displayFailMsg(`Failed to add person: ${error.response.data.error}`);
       });
 
   const updatePerson = (id, updatedPerson) =>
@@ -32,6 +36,9 @@ const App = () => {
       .then(returnedPerson => {
         setPersons(persons.map(p => p.id === id ? returnedPerson : p));
         displaySuccessMsg(`Phone number of ${returnedPerson.name} changed to ${returnedPerson.number}`);
+      })
+      .catch(error => {
+        displayFailMsg(`Failed to update person: ${error.response.data.error}`);
       });
 
   const submitPerson = newPerson => {
@@ -53,7 +60,7 @@ const App = () => {
           displaySuccessMsg(`Removed ${person.name}`);
         })
         .catch(error => {
-          displayFailMsg(`Entry for ${person.name} has already been removed from the server`)
+          displayFailMsg(`Failed to remove person: ${error.response.data.error}`);
         })
         .finally(() => {
           setPersons( persons.filter(p => p.id !== person.id))
