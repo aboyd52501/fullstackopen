@@ -4,6 +4,8 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 
+const SESSION_STORAGE_KEY = 'react-app-login-info'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
@@ -11,28 +13,42 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
+    
+    const savedCreds = localStorage.getItem(SESSION_STORAGE_KEY)
+    if (savedCreds)
+      setUser(JSON.parse(savedCreds))
   }, [])
 
   const submitLogin = loginData => {
     axios
       .post('/api/login', loginData)
       .then(res => {
-        const { data } = res;
-        setUser(data)
-        console.log(data)
+        login(res.data)
       })
       .catch(err => {
         if (err.response.status === 401)
-          alert('Invalid Credentials');
+          alert('Invalid Credentials')
       });
   };
+
+  const login = user => {
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user))
+    setUser(user)
+    console.log(user)
+  }
+
+  const logout = e => {
+    localStorage.removeItem(SESSION_STORAGE_KEY)
+    setUser(null)
+  }
 
   if (user) {
     return (
       <div>
         <h2>blogs</h2>
         <p>{user.name} ({user.username}) logged in</p>
+        <button onClick={logout}>Log out</button>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
