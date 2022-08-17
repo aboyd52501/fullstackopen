@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
+import AddBlogForm from './components/AddBlogForm'
 import blogService from './services/blogs'
 
 const SESSION_STORAGE_KEY = 'react-app-login-info'
@@ -17,7 +18,7 @@ const App = () => {
     
     const savedCreds = localStorage.getItem(SESSION_STORAGE_KEY)
     if (savedCreds)
-      setUser(JSON.parse(savedCreds))
+      login(JSON.parse(savedCreds))
   }, [])
 
   const submitLogin = loginData => {
@@ -32,9 +33,11 @@ const App = () => {
       });
   };
 
+
   const login = user => {
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user))
     setUser(user)
+    blogService.setToken(user.token)
     console.log(user)
   }
 
@@ -49,6 +52,9 @@ const App = () => {
         <h2>blogs</h2>
         <p>{user.name} ({user.username}) logged in</p>
         <button onClick={logout}>Log out</button>
+        <br />
+        <AddBlogForm submitBlog={blogService.create}/>
+        <br />
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
