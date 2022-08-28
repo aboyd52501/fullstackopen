@@ -1,6 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios'
+
 const baseUrl = '/api/blogs'
+const blogUrl = id => `${baseUrl}/${id}`
 
 let token = null;
 const authHeader = () => `bearer ${token}`
@@ -22,4 +24,13 @@ const create = blog => {
     .then(response => response.data)
 }
 
-export default { getAll, setToken, create }
+const like = blog => {
+  return axios
+    .put(
+      blogUrl(blog.id),
+      { likes: blog.likes + 1 }
+    )
+    .then(response => response.data)
+}
+
+export default { getAll, setToken, create, like }

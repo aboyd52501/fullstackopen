@@ -15,9 +15,11 @@ const App = () => {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
+    blogService
+      .getAll()
+      .then(blogs =>
+        setBlogs( blogs )
+      )
     
     const savedCreds = localStorage.getItem(SESSION_STORAGE_KEY)
     if (savedCreds)

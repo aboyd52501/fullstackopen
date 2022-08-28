@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import blogService from '../services/blogs'
 
 const Blog = ({blog}) => {
 
@@ -20,6 +21,12 @@ const Blog = ({blog}) => {
     display: open ? '' : 'none',
   }
 
+  const likeThis = e => {
+    blogService
+      .like(blog)
+      .then(console.log)
+  }
+
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author} ({blog.user.username}) {' '}
@@ -28,7 +35,7 @@ const Blog = ({blog}) => {
       <div style={showOpen}>
         <ul>
           <li>{blog.url}</li>
-          <li>likes: {blog.likes} <button>like</button></li>
+          <li>likes: {blog.likes} <button onClick={likeThis}>like</button></li>
           <li>{blog.author}</li>
         </ul>
       </div>
