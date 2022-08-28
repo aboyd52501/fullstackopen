@@ -17,8 +17,10 @@ const App = () => {
   useEffect(() => {
     blogService
       .getAll()
-      .then(blogs =>
+      .then(blogs => {
+        blogs.sort((a, b) => -a.likes + b.likes)
         setBlogs( blogs )
+        }
       )
     
     const savedCreds = localStorage.getItem(SESSION_STORAGE_KEY)
@@ -61,6 +63,7 @@ const App = () => {
     try {
       localStorage.removeItem(SESSION_STORAGE_KEY)
       setUser(null)
+      blogService.setToken(null)
       successNotify('Logged out successfuly');
     }
     catch (e) {
@@ -98,7 +101,12 @@ const App = () => {
 
       <br />
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          successNotif={successNotify}
+          failNotif={failNotify}
+        />
       )}
     </div>
   )

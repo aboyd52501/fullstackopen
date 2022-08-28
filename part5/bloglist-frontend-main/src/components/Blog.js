@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({blog}) => {
+const Blog = ({blog, failNotif, successNotif}) => {
 
   const blogStyle = {
     margin: '8px 0 8px 0',
@@ -24,7 +24,16 @@ const Blog = ({blog}) => {
   const likeThis = e => {
     blogService
       .like(blog)
-      .then(console.log)
+      .then(() => successNotif(`Liked ${blog.title}`))
+      .catch(() => failNotif(`Failed to like ${blog.title}: ${e.message}`))
+  }
+
+  const deleteThis = e => {
+    if (!window.confirm(`Remove ${blog.title}?`)) return
+    blogService
+      .del(blog)
+      .then(() => successNotif(`Deleted ${blog.title}`))
+      .catch(e => failNotif(`Failed to delete ${blog.title}: ${e.message}`))
   }
 
   return (
@@ -38,6 +47,7 @@ const Blog = ({blog}) => {
           <li>likes: {blog.likes} <button onClick={likeThis}>like</button></li>
           <li>{blog.author}</li>
         </ul>
+      <button onClick={deleteThis}>Delete</button>
       </div>
     </div>  
   )

@@ -33,4 +33,16 @@ const like = blog => {
     .then(response => response.data)
 }
 
-export default { getAll, setToken, create, like }
+const del = blog => {
+  const config = {
+    headers: { Authorization: authHeader() },
+  }
+
+  return axios
+    .delete(
+      blogUrl(blog.id),
+      config,
+    )
+}
+
+export default { getAll, setToken, create, like, del }
