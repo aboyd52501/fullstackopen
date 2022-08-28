@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
+import Toggleable from './components/Toggleable'
 import LoginForm from './components/LoginForm'
 import AddBlogForm from './components/AddBlogForm'
 import Notification from './components/Notification'
@@ -65,36 +66,40 @@ const App = () => {
     }
   }
 
-  const submitBlog = (...args) => {
-    blogService.create(...args)
-    .then(() => successNotify('Successfully added blog'))
-    .catch((e) => failNotify(`Failed to add blog: ${e.response.data.error}`))
+  const blogToggleableRef = useRef()
+
+  const submitBlog = (blog) => {
+    blogService
+      .create(blog)
+      .then(() => {
+        successNotify('Successfully added blog')
+        blogToggleableRef.current.toggleVisibility()
+      })
+      .catch((e) => failNotify(`Failed to add blog: ${e.response.data.error}`))
   }
 
-  if (user) {
-    return (
-      <div>
-        <Notification notification={notification} />
-        <h2>blogs</h2>
-        <p>{user.name} ({user.username}) logged in</p>
-        <button onClick={logout}>Log out</button>
-        <br />
-        <AddBlogForm submitBlog={submitBlog}/>
-        <br />
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-      </div>
-    )
-  }
-  else {
-    return (
-      <div>
-        <Notification notification={notification} />
+  return (
+    <div>
+      <Notification notification={notification} />
+      <h2>blogs</h2>
+
+      {user ?
+        <div>
+          <p>{user.name} ({user.username}) logged in <button onClick={logout}>Log out</button></p>
+          <Toggleable openLabel='Add post' ref={blogToggleableRef}>
+            <AddBlogForm submitBlog={submitBlog}/>
+          </Toggleable>
+        </div>
+        :
         <LoginForm submitLogin={submitLogin}/>
-      </div>
-    )
-  }
+      }
+
+      <br />
+      {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} />
+      )}
+    </div>
+  )
 }
 
 export default App
