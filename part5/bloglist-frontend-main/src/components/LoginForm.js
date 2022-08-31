@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const makeHandler = setFxn => e => setFxn(e.target.value);
+const makeHandler = setFxn => e => setFxn(e.target.value)
 
 const LoginForm = ({ submitLogin }) => {
   const [username, setUsername] = useState('')
@@ -17,22 +17,22 @@ const LoginForm = ({ submitLogin }) => {
       password,
     }
 
-    submitLogin(loginData);
+    submitLogin(loginData)
 
     setUsername('')
     setPassword('')
-  };
+  }
 
   return (
     <div>
       <form onSubmit={handleLogin}>
         <div>
-            <label htmlFor='username'>username: </label>
-            <input id='username' type='text' value={username} onChange={handleUsername} />
+          <label htmlFor='username'>username: </label>
+          <input id='username' type='text' value={username} onChange={handleUsername} />
         </div>
         <div>
-            <label htmlFor='password'>password: </label>
-            <input id='password' type='password' value={password} onChange={handlePassword} />
+          <label htmlFor='password'>password: </label>
+          <input id='password' type='password' value={password} onChange={handlePassword} />
         </div>
         <div>
           <button type='submit'>Login</button>
@@ -40,6 +40,6 @@ const LoginForm = ({ submitLogin }) => {
       </form>
     </div>
   )
-};
+}
 
 export default LoginForm

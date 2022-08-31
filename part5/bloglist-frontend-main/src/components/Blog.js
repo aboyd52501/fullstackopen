@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 
-const Blog = ({blog, failNotif, successNotif}) => {
+const Blog = ({ blog, failNotif, successNotif }) => {
 
   const blogStyle = {
     margin: '8px 0 8px 0',
@@ -29,7 +29,7 @@ const Blog = ({blog, failNotif, successNotif}) => {
       .catch(() => failNotif(`Failed to like ${blog.title}: ${e.message}`))
   }
 
-  const deleteThis = e => {
+  const deleteThis = () => {
     if (!window.confirm(`Remove ${blog.title}?`)) return
     blogService
       .del(blog)
@@ -48,9 +48,9 @@ const Blog = ({blog, failNotif, successNotif}) => {
           <li>likes: {blog.likes} <button onClick={likeThis}>like</button></li>
           <li>{blog.author}</li>
         </ul>
-      <button onClick={deleteThis}>Delete</button>
+        <button onClick={deleteThis}>Delete</button>
       </div>
-    </div>  
+    </div>
   )
 }
 

@@ -12,7 +12,7 @@ const SESSION_STORAGE_KEY = 'react-app-login-info'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null);
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     blogService
@@ -20,9 +20,9 @@ const App = () => {
       .then(blogs => {
         blogs.sort((a, b) => -a.likes + b.likes)
         setBlogs( blogs )
-        }
+      }
       )
-    
+
     const savedCreds = localStorage.getItem(SESSION_STORAGE_KEY)
     if (savedCreds)
       login(JSON.parse(savedCreds))
@@ -30,28 +30,28 @@ const App = () => {
 
 
   const displayNotification = (message, color) => {
-    setNotification({message, color});
+    setNotification({ message, color })
     setTimeout(() => {
-      setNotification(null);
+      setNotification(null)
     }, 3000)
   }
 
-  const failNotify = (message) => displayNotification(message, 'red');
-  const successNotify = (message) => displayNotification(message, 'green');
+  const failNotify = (message) => displayNotification(message, 'red')
+  const successNotify = (message) => displayNotification(message, 'green')
 
   const submitLogin = loginData => {
     axios
       .post('/api/login', loginData)
       .then(res => {
         login(res.data)
-        successNotify(`Login successful`)
+        successNotify('Login successful')
       })
       .catch(err => {
         if (err.response.status === 401)
           failNotify('Invalid credentials')
-      });
-  };
-  
+      })
+  }
+
   const login = user => {
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user))
     setUser(user)
@@ -59,15 +59,15 @@ const App = () => {
     console.log(user)
   }
 
-  const logout = e => {
+  const logout = () => {
     try {
       localStorage.removeItem(SESSION_STORAGE_KEY)
       setUser(null)
       blogService.setToken(null)
-      successNotify('Logged out successfuly');
+      successNotify('Logged out successfuly')
     }
     catch (e) {
-      failNotify(`Logout failed: ${e}`);
+      failNotify(`Logout failed: ${e}`)
     }
   }
 

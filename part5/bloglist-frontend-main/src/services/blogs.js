@@ -1,10 +1,9 @@
-/* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios'
 
 const baseUrl = '/api/blogs'
 const blogUrl = id => `${baseUrl}/${id}`
 
-let token = null;
+let token = null
 const authHeader = () => `bearer ${token}`
 
 const getAll = () => {
@@ -45,4 +44,12 @@ const del = blog => {
     )
 }
 
-export default { getAll, setToken, create, like, del }
+const blogService = {
+  getAll,
+  setToken,
+  create,
+  like,
+  del,
+}
+
+export default blogService

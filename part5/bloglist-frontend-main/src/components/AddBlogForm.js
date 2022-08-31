@@ -30,7 +30,7 @@ const AddBlogForm = ({ submitBlog }) => {
     <div>
       <h2>Create new blog</h2>
       <form onSubmit={handleSubmit}>
-      <div>
+        <div>
           <label htmlFor='title'>Title: </label>
           <input
             type='text' id='title'
@@ -55,6 +55,6 @@ const AddBlogForm = ({ submitBlog }) => {
       </form>
     </div>
   )
-};
+}
 
 export default AddBlogForm

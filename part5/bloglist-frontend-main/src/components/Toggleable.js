@@ -32,4 +32,6 @@ const Toggleable = forwardRef((props, refs) => {
   )
 })
 
+Toggleable.displayName = 'Toggleable'
+
 export default Toggleable
