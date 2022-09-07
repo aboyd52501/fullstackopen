@@ -1,6 +1,7 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
@@ -16,13 +17,15 @@ describe('<Blog />', () => {
     },
   }
 
-  let container;
+  let component
+  let container
 
   beforeEach(() => {
-    container = render(<Blog blog={testBlog} />).container
+    component = render(<Blog blog={testBlog} />)
+    container = component.container
   })
 
-  test('Renders only title and author by default, not likes and url',
+  test('renders only title and author by default, not likes and url',
     () => {
 
       expect(container).toHaveTextContent(testBlog.title)
@@ -35,5 +38,18 @@ describe('<Blog />', () => {
       // screen.debug()
     }
   )
+
+  test('clicking the show button calls the event handler exactly once',
+    async () => {
+      const botonMostrar = container.querySelector('.blogShowButton')
+      const user = userEvent.setup()
+      await user.click(botonMostrar)
+
+      const toggleableDiv = container.querySelector('.toggleableContent')
+      expect(toggleableDiv).not.toHaveStyle('display: none')
+
+      expect(container).toHaveTextContent(testBlog.url)
+      expect(container).toHaveTextContent(testBlog.likes)
+    })
 
 })

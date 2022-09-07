@@ -44,8 +44,16 @@ const Blog = ({ blog, failNotif, successNotif }) => {
         <p>{blog.author}</p>
         <p>({blog.user.username})</p>
       </div>
-      <button style={hideOpen} onClick={toggleVisibility}>View</button>
-      <button style={showOpen} onClick={toggleVisibility}>Hide</button>
+      <button
+        style={hideOpen}
+        onClick={toggleVisibility}
+        className='blogShowButton'
+      >View</button>
+      <button
+        style={showOpen}
+        onClick={toggleVisibility}
+        className='blogHideButton'
+      >Hide</button>
       <div style={showOpen} className='toggleableContent'>
         <ul>
           <li>{blog.url}</li>
