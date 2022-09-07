@@ -4,7 +4,6 @@
 
 # src folder
 **/App.css
-**/*.test.*
 **/index.css
 **/logo.svg
 **/reportWebVitals.js
