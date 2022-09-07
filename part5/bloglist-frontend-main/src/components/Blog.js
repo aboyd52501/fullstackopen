@@ -38,11 +38,15 @@ const Blog = ({ blog, failNotif, successNotif }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      {blog.title} {blog.author} ({blog.user.username}) {' '}
+    <div style={blogStyle} className='blog'>
+      <h3>{blog.title}</h3>
+      <div>
+        <p>{blog.author}</p>
+        <p>({blog.user.username})</p>
+      </div>
       <button style={hideOpen} onClick={toggleVisibility}>View</button>
       <button style={showOpen} onClick={toggleVisibility}>Hide</button>
-      <div style={showOpen}>
+      <div style={showOpen} className='toggleableContent'>
         <ul>
           <li>{blog.url}</li>
           <li>likes: {blog.likes} <button onClick={likeThis}>like</button></li>
