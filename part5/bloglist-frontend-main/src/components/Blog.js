@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, failNotif, successNotif }) => {
+const Blog = ({ blog, failNotif, successNotif, likeCallback }) => {
 
   const blogStyle = {
     margin: '8px 0 8px 0',
@@ -37,6 +37,8 @@ const Blog = ({ blog, failNotif, successNotif }) => {
       .catch(e => failNotif(`Failed to delete ${blog.title}: ${e.message}`))
   }
 
+  likeCallback = likeCallback || likeThis
+
   return (
     <div style={blogStyle} className='blog'>
       <h3>{blog.title}</h3>
@@ -57,7 +59,12 @@ const Blog = ({ blog, failNotif, successNotif }) => {
       <div style={showOpen} className='toggleableContent'>
         <ul>
           <li>{blog.url}</li>
-          <li>likes: {blog.likes} <button onClick={likeThis}>like</button></li>
+          <li>likes: {blog.likes}
+            <button
+              onClick={likeCallback}
+              className='blogLikeButton'
+            >like</button>
+          </li>
           <li>{blog.author}</li>
         </ul>
         <button onClick={deleteThis}>Delete</button>

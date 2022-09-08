@@ -19,9 +19,11 @@ describe('<Blog />', () => {
 
   let component
   let container
+  let mockLike
 
   beforeEach(() => {
-    component = render(<Blog blog={testBlog} />)
+    mockLike = jest.fn()
+    component = render(<Blog blog={testBlog} likeCallback={mockLike}/>)
     container = component.container
   })
 
@@ -50,6 +52,22 @@ describe('<Blog />', () => {
 
       expect(container).toHaveTextContent(testBlog.url)
       expect(container).toHaveTextContent(testBlog.likes)
+    })
+
+  test('like function is called twice when like button is pressed twice',
+    async () => {
+      const botonMostrar = container.querySelector('.blogShowButton')
+      const user = userEvent.setup()
+      await user.click(botonMostrar)
+
+      const botonGustar = container.querySelector('.blogLikeButton')
+      expect(mockLike.mock.calls).toHaveLength(0)
+
+      await user.click(botonGustar)
+      await user.click(botonGustar)
+
+      expect(mockLike.mock.calls).toHaveLength(2)
+
     })
 
 })
