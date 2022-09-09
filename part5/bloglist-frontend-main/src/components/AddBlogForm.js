@@ -33,21 +33,21 @@ const AddBlogForm = ({ submitBlog }) => {
         <div>
           <label htmlFor='title'>Title: </label>
           <input
-            type='text' id='title'
+            type='text' id='title' className='blogTitleInput'
             value={title} onChange={handleTitle}
           />
         </div>
         <div>
           <label htmlFor='author'>Author: </label>
           <input
-            type='text' id='author'
+            type='text' id='author' className='blogAuthorInput'
             value={author} onChange={handleAuthor}
           />
         </div>
         <div>
           <label htmlFor='url'>Url: </label>
           <input
-            type='text' id='url'
+            type='text' id='url' className='blogUrlInput'
             value={url} onChange={handleUrl}
           />
         </div>
