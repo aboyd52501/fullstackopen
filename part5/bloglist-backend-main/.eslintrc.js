@@ -11,6 +11,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  plugins: [
+    'react', 'jest', 'cypress',
+  ],
   rules: {
     'no-console': 'off',
     'no-underscore-dangle': 'off',
