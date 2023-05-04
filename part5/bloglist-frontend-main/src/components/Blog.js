@@ -39,12 +39,14 @@ const Blog = ({ blog, failNotif, successNotif, likeCallback }) => {
 
   likeCallback = likeCallback || likeThis
 
+  let username = blog.user ? blog.user.username : 'Anonymous'
+
   return (
     <div style={blogStyle} className='blog'>
       <h3>{blog.title}</h3>
       <div>
         <p>{blog.author}</p>
-        <p>({blog.user.username})</p>
+        <p>({username})</p>
       </div>
       <button
         style={hideOpen}
