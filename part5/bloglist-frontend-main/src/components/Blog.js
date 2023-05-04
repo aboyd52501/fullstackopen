@@ -5,9 +5,16 @@ import blogService from '../services/blogs'
 const Blog = ({ blog, failNotif, successNotif, likeCallback }) => {
 
   const blogStyle = {
-    margin: '8px 0 8px 0',
+    margin: '8px 0',
     border: '1px solid',
-    padding: 8,
+    padding: '8px',
+    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+    borderRadius: '8px',
+    backgroundColor: 'white',
+    fontFamily: 'Helvetica, Arial, sans-serif',
+    fontSize: '16px',
+    lineHeight: '24px',
+    color: '#333333',
   }
 
   const [open, setOpen] = useState()
