@@ -1,4 +1,12 @@
-// I removed the unused variable because airbnb eslint didn't like it
+/*
+  This file contains utility functions for manipulating a list of blog objects.
+  The function `dummy` returns 1.
+  The function `totalLikes` takes an array of blog objects and returns the sum of their 'likes' properties.
+  The function `favoriteBlog` takes an array of blog objects and returns the object with the highest 'likes' property.
+  The function `mostBlogs` takes an array of blog objects and returns an object containing the author with the most blogs and the number of their blogs.
+  The function `mostLikes` takes an array of blog objects and returns an object containing the author with the most total likes and the number of their likes.
+*/
+
 const dummy = () => 1;
 
 const totalLikes = (blogs) => (

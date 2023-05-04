@@ -1,3 +1,10 @@
+/*
+This code exports a simple logging utility that writes logs to a file when the `NODE_ENV` environment variable is set to `'test'`. The utility has two functions, `info` and `error`, which take a variable number of arguments and write them to the log file or the console. 
+
+The logging utility checks the size of the log file and truncates it if it exceeds a specified size limit. The log file is named `./.testoutput` and is created in the same directory as the module file. 
+
+When the `NODE_ENV` environment variable is not set to `'test'`, the `info` and `error` functions log to the console as usual.
+*/
 const fs = require('fs');
 
 const TESTING = process.env.NODE_ENV === 'test';

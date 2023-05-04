@@ -1,3 +1,16 @@
+/*
+This module defines several middleware functions to be used in the Express application:
+
+- `requestLogger`: logs information about incoming requests, such as the HTTP method, request path, and request body.
+
+- `tokenExtractor`: extracts the JWT token from the Authorization header of a request, if present, and adds it to the request object as `req.token`.
+
+- `userExtractor`: uses the JWT token to find the corresponding user in the database and adds the user object to the request object as `req.user`. If the token is invalid or the user cannot be found, an appropriate error response is sent instead.
+
+- `unknownEndpoint`: sends a 404 error response for unknown endpoints.
+
+- `errorHandler`: handles errors thrown by other middleware functions or route handlers. The specific error types handled are `CastError` (thrown by Mongoose when a query parameter is malformed), `ValidationError` (thrown by Mongoose when a model fails validation), `JsonWebTokenError` (thrown by the `jsonwebtoken` library when a JWT token is invalid), and `TokenExpiredError` (thrown by `jsonwebtoken` when a JWT token has expired). All other errors are passed on to the default error handler.
+*/
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const logger = require('./logger');

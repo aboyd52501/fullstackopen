@@ -1,3 +1,12 @@
+/*
+This code block is a test suite for the user authentication and login feature of the application. It requires the necessary modules and files for testing, including the Express app, Mongoose, and the User model. 
+
+The `beforeAll` block runs once before any tests are executed and deletes all existing users from the database. It also adds a single user from the `initialUsers` array using the API endpoint to create a new user.
+
+The `describe` block contains two tests that are run when there is an existing user in the database. The first test checks that a valid login token is received when the correct username and password are submitted. The second test checks that an error 401 is returned when invalid login data is submitted.
+
+Finally, the `afterAll` block closes the Mongoose connection after all tests have finished running.
+*/
 const supertest = require('supertest');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');

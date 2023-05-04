@@ -1,3 +1,16 @@
+/*
+This file contains tests related to user creation, and specifically focuses on the scenario where there is initially one user in the database. 
+
+It uses the supertest library for making HTTP requests to the API, and bcrypt for hashing passwords. It also imports the mongoose library and User model from the app, as well as the usersInDb function from the test_helper file.
+
+The tests in this file include: 
+- Retrieving users from the handle /
+- Successfully creating a new user with a fresh username
+- Failing to create a new user when the username is already taken
+- Failing to create a new user when the username or password is too short
+
+This file also includes an afterAll function to close the mongoose connection after all tests have finished running.
+*/
 const supertest = require('supertest');
 
 const bcrypt = require('bcrypt');
