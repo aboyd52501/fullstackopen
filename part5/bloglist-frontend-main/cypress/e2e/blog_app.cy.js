@@ -1,16 +1,17 @@
 /* eslint-disable no-undef */
 describe('Blog app', () => {
 
+  const user = {
+    username: 'testificate',
+    name: 'Testificate Sr.',
+    password: 'minecraft21'
+  }
+
   beforeEach(() => {
     // Clear the DB
     cy.request('POST', 'http://localhost:3000/api/testing/reset')
 
     // Create a user
-    const user = {
-      username: 'testificate',
-      name: 'Testificate Sr.',
-      password: 'minecraft21'
-    }
     cy.request('POST', 'http://localhost:3000/api/users', user)
 
     cy.visit('http://localhost:3000')
@@ -25,5 +26,34 @@ describe('Blog app', () => {
     cy.contains('username:')
     cy.contains('password:')
     cy.contains('Login')
+  })
+
+  describe('Login', () => {
+    it('succeeds with correct credentials', () => {
+      cy.get('input[id=username]')
+        .type(user.username)
+      cy.get('input[id=password]')
+        .type(user.password)
+      cy.contains('Login')
+        .click()
+
+      // See if the "Log Out" button appears
+      cy.contains('Log out')
+      cy.contains('logged in')
+      cy.contains('Login successful')
+    })
+
+    it('fails with wrong credentials', () => {
+      cy.get('input[id=username]')
+        .type('test')
+      cy.get('input[id=password]')
+        .type('invalid password')
+      cy.contains('Login')
+        .click()
+
+      cy.contains('Login')
+      cy.contains('username:')
+      cy.contains('Invalid credentials')
+    })
   })
 })
