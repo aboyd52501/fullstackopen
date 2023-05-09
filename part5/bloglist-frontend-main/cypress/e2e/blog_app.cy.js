@@ -132,6 +132,23 @@ describe('Blog app', () => {
 
       cy.contains('likes: 1')
     })
+
+    it('user can delete own blog', () => {
+      cy.get('.blogShowButton')
+        .eq(0) // Select just the first one we see
+        .click()
+
+      cy.get('body')
+        .should('contain', 'blog1')
+
+      cy.contains('button', 'Delete')
+        .click()
+
+      cy.reload()
+
+      cy.get('body')
+        .should('not.contain', 'blog1')
+    })
   })
 
 })
