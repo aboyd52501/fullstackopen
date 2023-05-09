@@ -7,8 +7,6 @@ describe('Blog app', () => {
     password: 'minecraft21'
   }
 
-  const URL = 'http://localhost:3000'
-
   beforeEach(() => {
     // Clear the DB
     cy.request('POST', 'http://localhost:3000/api/testing/reset')
@@ -72,7 +70,7 @@ describe('Blog app', () => {
         .click()
     })
 
-    it('can create a new blog', () => {
+    it('user can create a new blog', () => {
       // Open the 'Add post' Toggleable input
       cy.contains('Add post')
         .click()
@@ -95,4 +93,45 @@ describe('Blog app', () => {
       cy.contains('View')
     })
   })
+
+  describe('When logged in and blog posts are added', () => {
+    beforeEach(() => {
+      cy.get('input[id=username]')
+        .type(user.username)
+      cy.get('input[id=password]')
+        .type(user.password)
+      cy.contains('Login')
+        .click()
+
+      cy.contains('Add post')
+        .click()
+      cy.contains('Title:')
+        .type('blog1')
+      cy.contains('Author:')
+        .type(user.name)
+      cy.contains('Url:')
+        .type('blog::1')
+      cy.contains('Submit')
+        .click()
+
+      cy.reload()
+    })
+
+    it('user can like a post', () => {
+      cy.get('.blogShowButton')
+        .eq(0) // Select just the first one we see
+        .click()
+
+      cy.get('.blogLikeButton')
+        .click()
+
+      cy.reload()
+      cy.get('.blogShowButton')
+        .eq(0) // Select just the first one we see
+        .click()
+
+      cy.contains('likes: 1')
+    })
+  })
+
 })
