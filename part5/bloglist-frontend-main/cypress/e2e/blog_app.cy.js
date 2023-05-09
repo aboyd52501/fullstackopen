@@ -7,6 +7,8 @@ describe('Blog app', () => {
     password: 'minecraft21'
   }
 
+  const URL = 'http://localhost:3000'
+
   beforeEach(() => {
     // Clear the DB
     cy.request('POST', 'http://localhost:3000/api/testing/reset')
@@ -56,6 +58,41 @@ describe('Blog app', () => {
       cy.contains('username:')
       cy.contains('Invalid credentials')
         .should('have.css', 'color', 'rgb(255, 0, 0)')
+    })
+  })
+
+  describe('When logged in', () => {
+    beforeEach(() => {
+      // Log in as testificate
+      cy.get('input[id=username]')
+        .type(user.username)
+      cy.get('input[id=password]')
+        .type(user.password)
+      cy.contains('Login')
+        .click()
+    })
+
+    it('can create a new blog', () => {
+      // Open the 'Add post' Toggleable input
+      cy.contains('Add post')
+        .click()
+
+      // Fill out the form
+      cy.contains('Title:')
+        .type('blog1234')
+      cy.contains('Author:')
+        .type(user.name)
+      cy.contains('Url:')
+        .type('0000000000000000')
+      cy.contains('Submit')
+        .click()
+
+      // Refresh the page
+      cy.reload()
+
+      // Check to see if the blog was added to the list
+      cy.contains('blog1234')
+      cy.contains('View')
     })
   })
 })
