@@ -41,6 +41,7 @@ describe('Blog app', () => {
       cy.contains('Log out')
       cy.contains('logged in')
       cy.contains('Login successful')
+        .should('have.css', 'color', 'rgb(0, 128, 0)')
     })
 
     it('fails with wrong credentials', () => {
@@ -54,6 +55,7 @@ describe('Blog app', () => {
       cy.contains('Login')
       cy.contains('username:')
       cy.contains('Invalid credentials')
+        .should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
 })
