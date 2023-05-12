@@ -50,7 +50,9 @@ const Blog = ({ blog, failNotif, successNotif, likeCallback }) => {
 
   return (
     <div style={blogStyle} className='blog'>
-      <h3>{blog.title}</h3>
+      <h3
+        className='blogTitle'
+      >{blog.title}</h3>
       <div>
         <p>{blog.author}</p>
         <p>({username})</p>
@@ -68,15 +70,20 @@ const Blog = ({ blog, failNotif, successNotif, likeCallback }) => {
       <div style={showOpen} className='toggleableContent'>
         <ul>
           <li>{blog.url}</li>
-          <li>likes: {blog.likes}
-            <button
-              onClick={likeCallback}
-              className='blogLikeButton'
-            >like</button>
+          <li
+            className='blogLikes'
+          >likes: {blog.likes}
           </li>
           <li>{blog.author}</li>
         </ul>
-        <button onClick={deleteThis}>Delete</button>
+        <button
+          onClick={likeCallback}
+          className='blogLikeButton'
+        >like</button>
+        <button
+          onClick={deleteThis}
+          className = 'blogDeleteButton'
+        >Delete</button>
       </div>
     </div>
   )

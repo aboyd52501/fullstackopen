@@ -1,4 +1,30 @@
 /* eslint-disable no-undef */
+
+Cypress.Commands.add('login', ({ username, password }) => {
+  cy.request({
+    url: 'http://localhost:3000/api/login',
+    method: 'POST',
+    body: { username, password }
+  })
+    .then( res => {
+      localStorage.setItem('react-app-login-info', JSON.stringify(res.body))
+      cy.visit('http://localhost:3000')
+    })
+})
+
+Cypress.Commands.add('createBlog', ({ title, author, url, likes }) => {
+  cy.request({
+    url: 'http://localhost:3000/api/blogs',
+    method: 'POST',
+    body: {title, author, url, likes},
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('react-app-login-info')).token}`
+    }
+  })
+
+  cy.visit('http://localhost:3000')
+})
+
 describe('Blog app', () => {
 
   const user = {
@@ -62,12 +88,13 @@ describe('Blog app', () => {
   describe('When logged in', () => {
     beforeEach(() => {
       // Log in as testificate
-      cy.get('input[id=username]')
-        .type(user.username)
-      cy.get('input[id=password]')
-        .type(user.password)
-      cy.contains('Login')
-        .click()
+      // cy.get('input[id=username]')
+      //   .type(user.username)
+      // cy.get('input[id=password]')
+      //   .type(user.password)
+      // cy.contains('Login')
+      //   .click()
+      cy.login({ username: user.username, password: user.password })
     })
 
     it('user can create a new blog', () => {
@@ -96,58 +123,141 @@ describe('Blog app', () => {
 
   describe('When logged in and blog posts are added', () => {
     beforeEach(() => {
-      cy.get('input[id=username]')
-        .type(user.username)
-      cy.get('input[id=password]')
-        .type(user.password)
-      cy.contains('Login')
-        .click()
+      // cy.get('input[id=username]')
+      //   .type(user.username)
+      // cy.get('input[id=password]')
+      //   .type(user.password)
+      // cy.contains('Login')
+      //   .click()
 
-      cy.contains('Add post')
-        .click()
-      cy.contains('Title:')
-        .type('blog1')
-      cy.contains('Author:')
-        .type(user.name)
-      cy.contains('Url:')
-        .type('blog::1')
-      cy.contains('Submit')
-        .click()
+      cy.login({ username: user.username, password: user.password })
+
+      cy.createBlog({
+        title: 'blog1',
+        author: user.name,
+        url: 'blog::1',
+        likes: 0
+      })
+
+      cy.createBlog({
+        title: 'blog2',
+        author: user.name,
+        url: 'blog::2',
+        likes: 1
+      })
+
+      cy.createBlog({
+        title: 'blog3',
+        author: user.name,
+        url: 'blog::3',
+        likes: 2
+      })
+
+      cy.createBlog({
+        title: 'blog4',
+        author: user.name,
+        url: 'blog::4',
+        likes: 4
+      })
+
+      cy.createBlog({
+        title: 'blog5',
+        author: user.name,
+        url: 'blog::5',
+        likes: 8
+      })
 
       cy.reload()
     })
 
     it('user can like a post', () => {
-      cy.get('.blogShowButton')
-        .eq(0) // Select just the first one we see
+
+      const blogName = 'blog4'
+
+      const getBlogDiv = () => cy.contains(blogName).parent()
+
+      getBlogDiv()
+        .find('button.blogShowButton')
         .click()
 
-      cy.get('.blogLikeButton')
-        .click()
+      getBlogDiv()
+        .find('.blogLikes')
+        .then($li => {
+          const beforeLikes = parseInt($li.text().replace(/\D/g,''))
+          return beforeLikes
+        })
+        .then(beforeLikes => {
+          getBlogDiv()
+            .find('button.blogLikeButton')
+            .click()
 
-      cy.reload()
-      cy.get('.blogShowButton')
-        .eq(0) // Select just the first one we see
-        .click()
+          cy.reload()
+
+          getBlogDiv()
+            .find('button.blogShowButton')
+            .click()
+
+          getBlogDiv()
+            .find('.blogLikes')
+            .should($li => {
+              const afterLikes = parseInt($li.text().replace(/\D/g,''))
+              expect(afterLikes).to.eq(beforeLikes+1)
+            })
+        })
+      // // Get the post we want to track
+      // cy.get('.blogTitle').eq(0).then($blogTitle => {
+      //   const blogTitle = $blogTitle.text()
+      //   const getBlogDiv = () => cy.contains(blogTitle).parent()
+
+      //   getBlogDiv()
+      //     .find('button.blogShowButton')
+      //     .click()
+
+      //   const $blogLikes = getBlogDiv()
+      //     .find('.blogLikes')
+      //   cy.log($blogLikes)
+      //   const blogLikesText = $blogLikes.text()
+      //   const likes = parseFloat(blogLikesText.replace(/[^0-9]/g, ''))
+      //   cy.log(likes)
+      // })
+
+      // cy.get('.blogShowButton')
+      //   .eq(0) // Select just the first one we see
+      //   .click()
+
+      // cy.get('.blogLikeButton')
+      //   .eq(0)
+      //   .click()
+
+      // cy.reload()
+      // cy.get('.blogShowButton')
+      //   .eq(0) // Select just the first one we see
+      //   .click()
 
       cy.contains('likes: 1')
     })
 
     it('user can delete own blog', () => {
-      cy.get('.blogShowButton')
-        .eq(0) // Select just the first one we see
-        .click()
+
+      const blogName = 'blog3'
+      const getBlogDiv = () => cy.contains(blogName).parent()
 
       cy.get('body')
-        .should('contain', 'blog1')
+        .should('contain', blogName)
 
-      cy.contains('button', 'Delete')
+      getBlogDiv().find('button.blogShowButton')
+        .click()
+
+      getBlogDiv().find('button.blogDeleteButton')
         .click()
 
       cy.reload()
 
       cy.get('body')
-        .should('not.contain', 'blog1')
+        .should('not.contain', blogName)
+
+      cy.get('body')
+        .should('contain', 'blog1')
     })
   })
 
