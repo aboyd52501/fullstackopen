@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, failNotif, successNotif, likeCallback }) => {
+const Blog = ({ blog, failNotif, successNotif, likeCallback, loginUser }) => {
 
   const blogStyle = {
     margin: '8px 0',
@@ -46,7 +46,12 @@ const Blog = ({ blog, failNotif, successNotif, likeCallback }) => {
 
   likeCallback = likeCallback || likeThis
 
-  let username = blog.user ? blog.user.username : 'Anonymous'
+  const username = blog.user ? blog.user.username : 'Anonymous'
+
+  const showDelStyle = {
+    display: (loginUser && blog.user && loginUser.username === blog.user.username) ? '' : 'none'
+  }
+
 
   return (
     <div style={blogStyle} className='blog'>
@@ -83,6 +88,7 @@ const Blog = ({ blog, failNotif, successNotif, likeCallback }) => {
         <button
           onClick={deleteThis}
           className = 'blogDeleteButton'
+          style={showDelStyle}
         >Delete</button>
       </div>
     </div>

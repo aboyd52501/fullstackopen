@@ -16,7 +16,7 @@ Cypress.Commands.add('createBlog', ({ title, author, url, likes }) => {
   cy.request({
     url: 'http://localhost:3000/api/blogs',
     method: 'POST',
-    body: {title, author, url, likes},
+    body: { title, author, url, likes },
     headers: {
       Authorization: `Bearer ${JSON.parse(localStorage.getItem('react-app-login-info')).token}`
     }
@@ -258,6 +258,25 @@ describe('Blog app', () => {
 
       cy.get('body')
         .should('contain', 'blog1')
+    })
+
+    it('only author can see delete button of a blog', () => {
+
+      cy.get('button.logoutButton')
+        .click()
+
+      cy.reload()
+
+      const blogName = 'blog1'
+      cy.contains(blogName)
+        .parent()
+        .find('button.blogShowButton')
+        .click()
+
+      cy.contains(blogName)
+        .parent()
+        .should('not.contain', 'button', 'Delete')
+
     })
   })
 

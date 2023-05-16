@@ -90,7 +90,10 @@ const App = () => {
 
       {user ?
         <div>
-          <p>{user.name} ({user.username}) logged in <button onClick={logout}>Log out</button></p>
+          <p>{user.name} ({user.username}) logged in <button
+            onClick={logout}
+            className = 'logoutButton'
+          >Log out</button></p>
           <Toggleable openLabel='Add post' ref={blogToggleableRef}>
             <AddBlogForm submitBlog={submitBlog}/>
           </Toggleable>
@@ -102,6 +105,7 @@ const App = () => {
       <br />
       {blogs.map(blog =>
         <Blog
+          loginUser={user}
           key={blog.id}
           blog={blog}
           successNotif={successNotify}
