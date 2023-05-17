@@ -147,17 +147,17 @@ describe('Blog app', () => {
       })
 
       cy.createBlog({
-        title: 'blog3',
-        author: user.name,
-        url: 'blog::3',
-        likes: 2
-      })
-
-      cy.createBlog({
         title: 'blog4',
         author: user.name,
         url: 'blog::4',
         likes: 4
+      })
+
+      cy.createBlog({
+        title: 'blog3',
+        author: user.name,
+        url: 'blog::3',
+        likes: 2
       })
 
       cy.createBlog({
@@ -204,35 +204,6 @@ describe('Blog app', () => {
               expect(afterLikes).to.eq(beforeLikes+1)
             })
         })
-      // // Get the post we want to track
-      // cy.get('.blogTitle').eq(0).then($blogTitle => {
-      //   const blogTitle = $blogTitle.text()
-      //   const getBlogDiv = () => cy.contains(blogTitle).parent()
-
-      //   getBlogDiv()
-      //     .find('button.blogShowButton')
-      //     .click()
-
-      //   const $blogLikes = getBlogDiv()
-      //     .find('.blogLikes')
-      //   cy.log($blogLikes)
-      //   const blogLikesText = $blogLikes.text()
-      //   const likes = parseFloat(blogLikesText.replace(/[^0-9]/g, ''))
-      //   cy.log(likes)
-      // })
-
-      // cy.get('.blogShowButton')
-      //   .eq(0) // Select just the first one we see
-      //   .click()
-
-      // cy.get('.blogLikeButton')
-      //   .eq(0)
-      //   .click()
-
-      // cy.reload()
-      // cy.get('.blogShowButton')
-      //   .eq(0) // Select just the first one we see
-      //   .click()
 
       cy.contains('likes: 1')
     })
@@ -277,6 +248,24 @@ describe('Blog app', () => {
         .parent()
         .should('not.contain', 'button', 'Delete')
 
+    })
+
+    it('blogs are ordered from most liked to least liked', () => {
+      cy.get('button.blogShowButton')
+        .each($button => {
+          cy.wrap($button)
+            .click()
+        })
+
+      const values = []
+      cy.get('.blogLikes')
+        .each($blogLikes => {
+          const num = parseFloat($blogLikes.text().replace(/\D/g,''))
+          values.push(num)
+          const valLen = values.length
+          if (valLen > 1)
+            expect(values[valLen-2] > num).to.be.true
+        })
     })
   })
 
