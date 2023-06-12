@@ -4,24 +4,33 @@ import ReactDOM from 'react-dom/client'
 import { createStore } from 'redux'
 import reducer from './reducer'
 
+import './index.css'
+
 const store = createStore(reducer)
 
+const createAction = action => () => store.dispatch({ type: action })
+
 const App = () => {
-  const good = () => {
-    store.dispatch({
-      type: 'GOOD'
-    })
-  }
+
+  const goodF = createAction('GOOD')
+  const okF = createAction('OK')
+  const badF = createAction('BAD')
+  const zeroF = createAction('ZERO')
+
+  const currentState = store.getState()
+  const good = currentState.good
+  const ok = currentState.ok
+  const bad = currentState.bad
 
   return (
-    <div>
-      <button onClick={good}>good</button> 
-      <button>ok</button> 
-      <button>bad</button>
-      <button>reset stats</button>
-      <div>good {store.getState().good}</div>
-      <div>ok</div>
-      <div>bad</div>
+    <div className='app-container'>
+      <button onClick={goodF}>good</button> 
+      <button onClick={okF}>ok</button> 
+      <button onClick={badF}>bad</button>
+      <button onClick={zeroF}>reset stats</button>
+      <div>good {good}</div>
+      <div>ok {ok}</div>
+      <div>bad {bad}</div>
     </div>
   )
 }
