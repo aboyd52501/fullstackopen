@@ -50,4 +50,14 @@ const reducer = (state = initialState, action) => {
   return stateOut
 }
 
+export const voteAction = id => ({
+  type: 'VOTE',
+  id: id
+})
+
+export const addAction = content => ({
+  type: 'ADD',
+  content: content
+})
+
 export default reducer

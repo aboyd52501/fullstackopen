@@ -1,18 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { voteAction, addAction } from './reducers/anecdoteReducer'
+import './App.css'
 
 const App = () => {
   const anecdotes = useSelector(state => state)
   const dispatch = useDispatch()
-
-  const voteAction = id => ({
-    type: 'VOTE',
-    id: id
-  })
-
-  const addAction = content => ({
-    type: 'ADD',
-    content: content
-  })
 
   const vote = id => {
     console.log('vote', id)
