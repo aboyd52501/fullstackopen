@@ -4,8 +4,14 @@ const App = () => {
   const anecdotes = useSelector(state => state)
   const dispatch = useDispatch()
 
+  const voteAction = id => ({
+    type: 'VOTE',
+    id: id
+  })
+
   const vote = (id) => {
     console.log('vote', id)
+    dispatch(voteAction(id))
   }
 
   return (
