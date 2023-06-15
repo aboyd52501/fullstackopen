@@ -9,9 +9,23 @@ const App = () => {
     id: id
   })
 
-  const vote = (id) => {
+  const addAction = content => ({
+    type: 'ADD',
+    content: content
+  })
+
+  const vote = id => {
     console.log('vote', id)
     dispatch(voteAction(id))
+  }
+
+  const add = event => {
+    event.preventDefault()
+
+    const content = event.target.content.value
+    event.target.content.value = ''
+    console.log('add', content)
+    dispatch(addAction(content))
   }
 
   return (
@@ -29,9 +43,9 @@ const App = () => {
         </div>
       )}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
+      <form onSubmit={add}>
+        <div><input name='content' /></div>
+        <button type='submit'>create</button>
       </form>
     </div>
   )
