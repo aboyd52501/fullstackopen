@@ -23,7 +23,7 @@ const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
 
-  let stateOut = state
+  let stateOut = [...state]
   switch (action.type) {
     case 'VOTE':
       const anecdoteTarget = state.find(anecdote => anecdote.id === action.id)
