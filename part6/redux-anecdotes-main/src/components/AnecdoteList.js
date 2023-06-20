@@ -5,7 +5,13 @@ import { voteAction } from '../reducers/anecdoteReducer'
 const AnecdoteList = () => {
 
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => {
+    if (state.filter.length > 0)
+      return state.anecdotes
+        .filter(anec => anec.content.match(state.filter))
+    else
+      return state.anecdotes
+  })
 
   const vote = id => dispatch(voteAction(id))
 

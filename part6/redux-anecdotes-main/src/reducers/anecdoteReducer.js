@@ -20,12 +20,10 @@ const asObject = (anecdote) => {
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
 
   let stateOut = [...state]
   switch (action.type) {
-    case 'VOTE':
+    case 'ANECDOTE_VOTE':
       const anecdoteTarget = state.find(anecdote => anecdote.id === action.id)
       const allOthers = state.filter(anecdote => anecdote.id !== action.id)
       stateOut = [
@@ -37,7 +35,7 @@ const reducer = (state = initialState, action) => {
         }
       ]
       break
-    case 'ADD':
+    case 'ANECDOTE_ADD':
       const newAnecdote = asObject(action.content)
       stateOut = [...state, newAnecdote]
       break
@@ -45,18 +43,17 @@ const reducer = (state = initialState, action) => {
       stateOut = state
   }
 
-  console.log('state after: ', stateOut)
   stateOut.sort((x, y) => -x.votes + y.votes)
   return stateOut
 }
 
 export const voteAction = id => ({
-  type: 'VOTE',
+  type: 'ANECDOTE_VOTE',
   id: id
 })
 
 export const addAction = content => ({
-  type: 'ADD',
+  type: 'ANECDOTE_ADD',
   content: content
 })
 
