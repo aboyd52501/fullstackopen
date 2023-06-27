@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { voteAction } from '../reducers/anecdoteReducer'
+import { voteAnecdote } from '../reducers/anecdoteReducer'
 
 
 const AnecdoteList = () => {
@@ -13,7 +13,7 @@ const AnecdoteList = () => {
       return state.anecdotes
   })
 
-  const vote = id => dispatch(voteAction(id))
+  const vote = id => dispatch(voteAnecdote(id))
 
   return anecdotes.map(anecdote =>
     <div className='anecdote' key={anecdote.id}>
