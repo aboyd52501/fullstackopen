@@ -1,11 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, useStore } from 'react-redux'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
-import { addNotification, removeNotification } from '../reducers/notificationReducer'
-
+import queueNotification from '../helpers/notificationManager'
 
 const AnecdoteList = () => {
 
+  const store = useStore()
   const dispatch = useDispatch()
+
   const anecdotes = useSelector(state => {
     if (state.filter.length > 0)
       return state.anecdotes
@@ -16,8 +17,7 @@ const AnecdoteList = () => {
 
   const vote = anec => {
     dispatch(voteAnecdote(anec.id))
-    dispatch(addNotification(`You voted for "${anec.content}"`))
-    setTimeout(() => dispatch(removeNotification()), 5000)
+    queueNotification(`You voted for "${anec.content}"`, store)
   }
 
   return anecdotes.map(anecdote =>
