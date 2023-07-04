@@ -16,7 +16,7 @@ const AnecdoteList = () => {
   })
 
   const vote = anec => {
-    dispatch(voteAnecdote(anec.id))
+    dispatch(voteAnecdote(anec))
     queueNotification(`You voted for "${anec.content}"`, store)
   }
 

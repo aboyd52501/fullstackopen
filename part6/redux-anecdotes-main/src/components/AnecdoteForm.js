@@ -1,7 +1,6 @@
 import { useDispatch, useStore } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import queueNotification from '../helpers/notificationManager'
-import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = () => {
 
