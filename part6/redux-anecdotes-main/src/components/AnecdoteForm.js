@@ -1,5 +1,5 @@
 import { useDispatch, useStore } from 'react-redux'
-import { appendAnecdote } from '../reducers/anecdoteReducer'
+import { createAnecdote } from '../reducers/anecdoteReducer'
 import queueNotification from '../helpers/notificationManager'
 import anecdoteService from '../services/anecdotes'
 
@@ -15,11 +15,7 @@ const AnecdoteForm = () => {
     event.target.content.value = ''
     console.log('add', content)
 
-    const data = await anecdoteService.add(content)
-
-    console.log(data)
-    dispatch(appendAnecdote(data))
-
+    dispatch(createAnecdote(content))
 
     queueNotification(`You added "${content}"`, store)
   }
