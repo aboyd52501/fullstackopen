@@ -1,10 +1,9 @@
-import { useDispatch, useStore } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
-import queueNotification from '../helpers/notificationManager'
+import { queueNotification } from '../reducers/notificationReducer'
 
 const AnecdoteForm = () => {
 
-  const store = useStore()
   const dispatch = useDispatch()
 
   const add = async event => {
@@ -15,8 +14,7 @@ const AnecdoteForm = () => {
     console.log('add', content)
 
     dispatch(createAnecdote(content))
-
-    queueNotification(`You added "${content}"`, store)
+    dispatch(queueNotification(`You added "${content}"`, 5000))
   }
 
   return (

@@ -1,10 +1,9 @@
-import { useDispatch, useSelector, useStore } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
-import queueNotification from '../helpers/notificationManager'
+import { queueNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
 
-  const store = useStore()
   const dispatch = useDispatch()
 
   const anecdotes = useSelector(state => {
@@ -17,7 +16,7 @@ const AnecdoteList = () => {
 
   const vote = anec => {
     dispatch(voteAnecdote(anec))
-    queueNotification(`You voted for "${anec.content}"`, store)
+    dispatch(queueNotification(`You voted for "${anec.content}"`, 5000))
   }
 
   return anecdotes.map(anecdote =>
