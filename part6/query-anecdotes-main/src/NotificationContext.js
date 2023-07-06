@@ -24,4 +24,9 @@ export const NotificationContextProvider = (props) => {
   )
 }
 
+export const sendNotification = (content, dispatch) => {
+  dispatch({type: 'SET', payload: content})
+  setTimeout(() => dispatch({type: 'REMOVE'}), 5000) 
+}
+
 export default NotificationContext
