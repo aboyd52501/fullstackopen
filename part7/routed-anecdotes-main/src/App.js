@@ -84,9 +84,11 @@ const CreateNew = (props) => {
   const [infoField, infoReset] = useField()
 
   const resetAll = () => {
-    contentReset()
-    authorReset()
-    infoReset()
+    [
+      contentReset,
+      authorReset,
+      infoReset
+    ].forEach(func => func())
   }
 
   const handleSubmit = (e) => {
