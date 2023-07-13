@@ -67,7 +67,11 @@ const About = () => (
 )
 
 const Footer = () => (
-  <div>
+  <div style={{
+    bottom: 0,
+    position: 'absolute',
+    padding: 8
+  }}>
     Anecdote app for <a href='https://fullstackopen.com/'>Full Stack Open</a>.
 
     See <a href='https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js'>https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js</a> for the source code.
@@ -79,6 +83,11 @@ const CreateNew = (props) => {
   const authorField = useField()
   const infoField = useField()
 
+  const resetAll = () => {
+    contentField.reset()
+    authorField.reset()
+    infoField.reset()
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -96,17 +105,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={contentField.value} onChange={contentField.onChange} />
+          <input name='content' {...contentField} />
         </div>
         <div>
           author
-          <input name='author' value={authorField.value} onChange={authorField.onChange} />
+          <input name='author' {...authorField} />
         </div>
         <div>
           url for more info
-          <input name='info' value={infoField.value} onChange={infoField.onChange} />
+          <input name='info' {...infoField} />
         </div>
         <button>create</button>
+        <button type='button' onClick={resetAll}>Reset </button>
       </form>
     </div>
   )
